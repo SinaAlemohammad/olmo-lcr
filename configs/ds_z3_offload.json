@@ -1,0 +1,23 @@
+{
+  "_comment": "Same as ds_z3.json but the fp32 master weights + Adam moments live in CPU RAM instead of GPU memory. Use only if PER_DEVICE_BS=1 still OOMs. Needs ~13B*12 bytes = ~160 GB of free host RAM on the node and is roughly 2x slower. Select with DS_CONFIG=ds_z3_offload.json.",
+  "train_batch_size": "auto",
+  "train_micro_batch_size_per_gpu": "auto",
+  "gradient_accumulation_steps": "auto",
+  "gradient_clipping": "auto",
+  "zero_allow_untested_optimizer": true,
+  "bf16": { "enabled": "auto" },
+  "fp16": { "enabled": "auto" },
+  "zero_optimization": {
+    "stage": 3,
+    "offload_optimizer": { "device": "cpu", "pin_memory": true },
+    "overlap_comm": true,
+    "contiguous_gradients": true,
+    "sub_group_size": 1e9,
+    "reduce_bucket_size": "auto",
+    "stage3_prefetch_bucket_size": "auto",
+    "stage3_param_persistence_threshold": "auto",
+    "stage3_max_live_parameters": 1e9,
+    "stage3_max_reuse_distance": 1e9,
+    "stage3_gather_16bit_weights_on_model_save": true
+  }
+}
