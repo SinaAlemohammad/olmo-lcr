@@ -31,8 +31,8 @@ PRIMARY = {
     "hellaswag":      ["acc_norm,none", "acc,none"],
     "winogrande":     ["acc,none"],
     "truthfulqa_mc2": ["acc,none"],
-    "gsm8k":          ["exact_match,strict-match", "exact_match,flexible-extract", "exact_match,none"],
-    "minerva_math":   ["exact_match,none", "exact_match,strict-match"],
+    "gsm8k":          ["exact_match,flexible-extract", "exact_match,strict-match", "exact_match,none"],  # paper: flexible-extract
+    "minerva_math":   ["math_verify,none", "exact_match,none", "exact_match,strict-match"],  # paper: math_verify
     "humaneval":      ["pass@1,create_test", "pass@1,none"],
 }
 
@@ -112,7 +112,7 @@ def main():
 
     subsets = sorted({r["subset"] for r in rows if r["subset"]} - {None})
     lines = [f"# Results — T={args.temperature}", "",
-             "Primary metric per task (acc_norm / acc / exact_match strict / pass@1). "
+             "Primary metric per task (acc_norm / acc / GSM8K flexible-extract / Minerva math_verify / pass@1). "
              "Epoch 0 = untouched base model. Δ = mean − base.", ""]
     for (task, fs) in sorted(table):
         lines += [f"## {task} ({fs}-shot)", ""]
